@@ -12,6 +12,7 @@ async fn main() {
   std::env::set_var("RUST_LOG", "info");
   env_logger::init();
 
+  // init atomic, false -> no 'runs', true -> already runned
   let is_running = Arc::new(AtomicBool::new(false));
   // init storage
   let storage = Arc::new(RwLock::new(storage::Storage::default()));
@@ -20,7 +21,6 @@ async fn main() {
 
   // POST /runs {seconds: 30} => {id: 7}
   let s = storage.clone();
-  let r = is_running.clone();
   let start_run = warp::post()
     .and(warp::path("runs"))
     .and(warp::path::end())
@@ -28,7 +28,7 @@ async fn main() {
     .and(warp::body::json())
     .and(warp::any().map(move || s.clone()))
     .and(warp::any().map(move || client.clone()))
-    .and(warp::any().map(move || r.clone()))
+    .and(warp::any().map(move || is_running.clone()))
     .and_then(handlers::start_run);
   // GET /runs/:id => {status: "IN_PROGRESS", successful_responses_count: 17, sum: 712}
   let s = storage.clone();

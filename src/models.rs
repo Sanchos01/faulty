@@ -1,14 +1,14 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use warp::reply::Response;
 
-#[derive(Debug, Deserialize, Serialize, Clone, Default)]
+#[derive(Debug, Serialize, Clone, Default)]
 pub struct Run {
   status: RunStatus,
   successful_responses_count: u16,
   sum: usize,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 enum RunStatus {
   InProgress,

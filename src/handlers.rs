@@ -11,12 +11,12 @@ use warp::Reply;
 
 type Db = Arc<RwLock<Storage>>;
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct CreateRunRequest {
   seconds: u16,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone)]
 pub struct CreateRunResponse {
   id: u16,
 }
@@ -32,7 +32,7 @@ impl warp::reply::Reply for CreateRunResponse {
   }
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone)]
 pub struct BadRequest<'a> {
   error: &'a str,
 }
