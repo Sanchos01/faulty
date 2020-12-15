@@ -1,14 +1,14 @@
 use serde::Serialize;
 use warp::reply::Response;
 
-#[derive(Debug, Serialize, Clone, Default)]
+#[derive(Debug, Serialize, Clone, Default, PartialEq)]
 pub struct Run {
   status: RunStatus,
   successful_responses_count: u16,
   sum: usize,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone, PartialEq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 enum RunStatus {
   InProgress,
@@ -41,4 +41,30 @@ impl warp::reply::Reply for Run {
       .body(body.into())
       .unwrap()
   }
+}
+
+#[test]
+fn run() {
+  let mut run = Run::default();
+  let r = Run {
+    status: RunStatus::InProgress,
+    successful_responses_count: 0,
+    sum: 0,
+  };
+  assert_eq!(run, r);
+  run.add_value(10);
+  run.add_value(15);
+  let r = Run {
+    status: RunStatus::InProgress,
+    successful_responses_count: 2,
+    sum: 25,
+  };
+  assert_eq!(run, r);
+  run.ended();
+  let r = Run {
+    status: RunStatus::Finished,
+    successful_responses_count: 2,
+    sum: 25,
+  };
+  assert_eq!(run, r);
 }

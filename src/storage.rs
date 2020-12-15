@@ -27,3 +27,26 @@ impl Storage {
     self.store.get(id)
   }
 }
+
+#[test]
+fn storage() {
+  let mut storage = Storage::default();
+  let id = storage.new_run();
+  for value in 5..=6 {
+    storage.insert(id, value);
+  }
+  let mut compare_run = Run::default();
+  for value in 5..=6 {
+    compare_run.add_value(value)
+  }
+  {
+    let run = storage.get_run(&id).unwrap();
+    assert_eq!(*run, compare_run);
+  }
+  storage.run_ended(id);
+  compare_run.ended();
+  {
+    let run = storage.get_run(&id).unwrap();
+    assert_eq!(*run, compare_run);
+  }
+}
