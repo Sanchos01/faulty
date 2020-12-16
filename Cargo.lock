@@ -232,6 +232,7 @@ dependencies = [
  "env_logger",
  "futures",
  "http",
+ "log",
  "reqwest",
  "serde",
  "serde_json",

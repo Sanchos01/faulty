@@ -9,7 +9,9 @@ mod storage;
 
 #[tokio::main]
 async fn main() {
-  std::env::set_var("RUST_LOG", "info");
+  if let Err(_) = std::env::var("RUST_LOG") {
+    std::env::set_var("RUST_LOG", "info");
+  }
   env_logger::init();
 
   // init atomic, false -> no 'runs', true -> already runned
